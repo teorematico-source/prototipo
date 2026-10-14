@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#031435">
+    <title>Miller AI</title>
+    
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [["\\(", "\\)"], ["$", "$"]],
+                displayMath: [["\\[", "\\]"], ["$$", "$$"]],
+                processEscapes: true
+            },
+            options: { skipHtmlTags: ["script", "noscript", "style", "textarea", "pre", "code"] }
+        };
+    </script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/mathjs@14.0.1/lib/browser/math.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/nerdamer.core.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Algebra.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Calculus.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/Solve.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- BARRA LATERAL -->
+        <aside id="sidebar" class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand-container">
+                    <span class="brand-icon">M</span>
+                    <div class="brand-text">
+                        <strong>Miller AI</strong>
+                        <span>Tu compañero de ideas</span>
+                    </div>
+                </div>
+                <span class="status-dot top-status"></span>
+                <button id="close-sidebar" class="icon-button mobile-only" type="button" aria-label="Cerrar menú">×</button>
+            </div>
+
+            <button id="new-chat" class="new-chat-button" type="button">
+                <span class="plus-icon">+</span>
+                <span>Nuevo chat</span>
+            </button>
+
+            <!-- Menú de Navegación -->
+            <nav class="sidebar-nav" aria-label="Navegación principal">
+                <button type="button" class="nav-item active" data-view="home"><span class="nav-icon">💬</span> Inicio</button>
+                <button type="button" class="nav-item" data-view="history"><span class="nav-icon">🕒</span> Historial</button>
+                <button type="button" class="nav-item" data-view="projects"><span class="nav-icon">📁</span> Proyectos</button>
+            </nav>
+
+            <div class="sidebar-section">
+                <div class="history-header">
+                    <p class="section-label">TUS CONVERSACIONES</p>
+                    <button id="clear-chats" class="clear-chats-button" type="button" title="Borrar todas las conversaciones" aria-label="Borrar todas las conversaciones">Borrar todo</button>
+                </div>
+                <nav id="chat-history" class="chat-history" aria-label="Historial de conversaciones"></nav>
+            </div>
+
+            <div class="sidebar-footer">
+                <button id="open-settings" class="settings-button" type="button">
+                    <span class="settings-icon">⚙️</span>
+                    <span>Configuración</span>
+                </button>
+
+                <div class="profile">
+                    <div class="profile-avatar">M</div>
+                    <div class="profile-info">
+                        <strong>Miller AI</strong>
+                        <span>En línea</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- CONTENIDO PRINCIPAL -->
+        <main class="main-content">
+            <!-- Barra Superior Flotante -->
+            <header class="topbar">
+                <div class="topbar-left">
+                    <button id="open-sidebar" class="icon-button mobile-only" type="button">☰</button>
+                    <span class="topbar-avatar">M</span>
+                    <strong>Miller AI</strong>
+                    <span class="version-label">👤 Personal</span>
+                </div>
+                <div class="topbar-actions">
+                    <time id="live-clock" class="live-clock" aria-label="Fecha y hora actual"></time>
+                    <button id="settings-button" class="icon-button" type="button" aria-label="Configuración">☼</button>
+                </div>
+            </header>
+
+            <!-- ÁREA DEL CHAT -->
+            <section id="chat-scroll" class="chat-scroll">
+                <div id="chat-view" class="chat-view">
+                    <div id="messages" class="messages"></div>
+
+                    <!-- PANTALLA DE BIENVENIDA -->
+                <div id="welcome" class="welcome">
+                    
+                    <h1>¡Hola! 👋 Soy Miller AI</h1>
+                    <p class="welcome-description">Tu asistente personal de IA, listo para ayudarte a aprender, resolver ideas y crear algo nuevo.</p>
+
+                    <div class="suggestion-grid">
+                        <button class="suggestion-card" type="button" data-prompt="Explícame un concepto científico desde sus fundamentos.">
+                            <div class="card-header">
+                                <span class="suggestion-icon icon-purple">✦</span>
+                                <span class="arrow-icon">›</span>
+                            </div>
+                            <span class="suggestion-title">Aprender algo nuevo</span>
+                            <span class="suggestion-description">Entiende los conceptos desde cero.</span>
+                        </button>
+
+                        <button class="suggestion-card" type="button" data-prompt="Ayúdame a resolver un problema de matemáticas paso a paso.">
+                            <div class="card-header">
+                                <span class="suggestion-icon icon-blue">∑</span>
+                                <span class="arrow-icon">›</span>
+                            </div>
+                            <span class="suggestion-title">Resolver problemas</span>
+                            <span class="suggestion-description">Matemáticas, física y lógica.</span>
+                        </button>
+
+                        <button class="suggestion-card" type="button" data-prompt="Ayúdame a programar una función en JavaScript.">
+                            <div class="card-header">
+                                <span class="suggestion-icon icon-green">{ }</span>
+                                <span class="arrow-icon">›</span>
+                            </div>
+                            <span class="suggestion-title">Programar</span>
+                            <span class="suggestion-description">Construyamos algo funcional.</span>
+                        </button>
+
+                        <button class="suggestion-card" type="button" data-prompt="Ayúdame a analizar este problema con lógica, identificar supuestos y evaluar posibles soluciones.">
+                            <div class="card-header">
+                                <span class="suggestion-icon icon-purple">◇</span>
+                                <span class="arrow-icon">›</span>
+                            </div>
+                            <span class="suggestion-title">Análisis lógico</span>
+                            <span class="suggestion-description">Descompón una idea y encuentra sus puntos clave.</span>
+                        </button>
+
+                    </div>
+                </div>
+
+                <!-- INDICADOR DE CARGA -->
+                    <div id="loading" class="loading hidden" aria-live="polite">
+                        <div class="loading-avatar">M</div>
+                        <div class="loading-content">
+                            <span class="loading-title">Miller está pensando</span>
+                            <div class="loading-dots" aria-hidden="true"><span></span><span></span><span></span></div>
+                        </div>
+                    </div>
+                </div>
+
+                <section id="history-view" class="workspace-view hidden" aria-labelledby="history-title">
+                    <h1 id="history-title">Historial de conversaciones</h1>
+                    <p class="workspace-description">Encuentra y continúa tus conversaciones anteriores.</p>
+                    <div id="history-list" class="workspace-list"></div>
+                </section>
+
+                <section id="projects-view" class="workspace-view hidden" aria-labelledby="projects-title">
+                    <h1 id="projects-title">Mis proyectos</h1>
+                    <p class="workspace-description">Organiza aquí tus ideas y trabajos.</p>
+                    <form id="project-form" class="project-form">
+                        <input id="project-name" type="text" maxlength="60" placeholder="Nombre del proyecto" aria-label="Nombre del proyecto" required>
+                        <button class="primary-button" type="submit">Crear proyecto</button>
+                    </form>
+                    <div id="projects-list" class="workspace-list"></div>
+                </section>
+
+            </section>
+
+            <!-- COMPOSITOR -->
+            <footer class="composer-area">
+                <form id="chat-form" class="composer">
+                    <div class="composer-inner">
+                        <span class="composer-star">✧</span>
+                        <input id="file-input" class="visually-hidden" type="file" accept="image/jpeg,image/png,image/webp,image/gif,.txt,.md,.csv,.json,.html,.css,.js,.py,.java,.xml,.yml,.yaml" multiple tabindex="-1" aria-hidden="true">
+                        <button id="attach-files" class="attach-button" type="button" aria-label="Adjuntar imágenes o archivos de texto" title="Imágenes (máximo 4 MB; se analizan con Gemini 2.5 Flash) o archivos de texto">📎</button>
+                        <textarea id="message-input" name="message" rows="1" placeholder="Escribe tu mensaje o una fórmula..." autocomplete="off" aria-label="Mensaje; puedes usar LaTeX"></textarea>
+                        <div class="composer-right">
+                            <span class="keyboard-hint">Enter para enviar</span>
+                            <button id="send-button" class="send-button" type="submit">➤</button>
+                        </div>
+                    </div>
+                    <div id="attachment-list" class="attachment-list hidden" aria-live="polite"></div>
+                    <div class="composer-bottom">
+                        <div class="composer-hint">
+                            <span class="hint-indicator"></span>
+                            <span>Conexión protegida mediante el backend</span>
+                        </div>
+                        <div class="chat-options">
+                            <label class="model-picker" for="chat-model-select">Modelo
+                                <select id="chat-model-select" aria-label="Modelo de conversación">
+                                    <option value="nvidia/nemotron-3-ultra-550b-a55b">NVIDIA Nemotron 3 Ultra 550B</option>
+                                    <option value="openrouter/free">OpenRouter Free</option>
+                                </select>
+                            </label>
+                            <button id="math-mode-toggle" class="math-mode-toggle" type="button" aria-pressed="false">
+                                ∑ <span>Modo matemáticas</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <p class="disclaimer">Miller AI puede equivocarse. Verifica la información importante.</p>
+            </footer>
+        </main>
+
+        <nav class="mobile-bottom-nav" aria-label="Navegación móvil">
+            <button type="button" class="nav-item active" data-view="home" aria-current="page"><span class="nav-icon">💬</span><span>Inicio</span></button>
+            <button type="button" class="nav-item" data-view="history"><span class="nav-icon">🕒</span><span>Historial</span></button>
+            <button type="button" class="nav-item" data-view="projects"><span class="nav-icon">📁</span><span>Proyectos</span></button>
+        </nav>
+    </div>
+
+    <div id="access-modal" class="modal-overlay access-overlay" role="dialog" aria-modal="true" aria-labelledby="access-title">
+        <section class="settings-panel access-panel">
+            <h2 id="access-title">Acceso privado</h2>
+            <p>Ingresa la contraseña de acceso para continuar.</p>
+            <form id="access-form" class="settings-form">
+                <div class="setting-group">
+                    <label for="access-password">Contraseña</label>
+                    <input id="access-password" type="password" autocomplete="current-password" required>
+                </div>
+                <div id="access-status" class="settings-status" aria-live="polite"></div>
+                <button class="primary-button" type="submit">Entrar</button>
+            </form>
+        </section>
+    </div>
+
+    <!-- MODAL DE CONFIGURACIÓN -->
+    <div id="settings-modal" class="modal-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="settings-title">
+        <section class="settings-panel">
+            <header class="settings-header">
+                <div>
+                    <h2 id="settings-title">Configuración</h2>
+                    <p>Configura tus preferencias de conversación.</p>
+                </div>
+                <button id="close-settings" class="icon-button" type="button">×</button>
+            </header>
+
+            <form id="settings-form" class="settings-form">
+                <div class="provider-heading">
+                    <div class="provider-icon">O</div>
+                    <div>
+                        <h3>OpenRouter</h3>
+                        <p>La conexión a OpenRouter se gestiona de forma segura en el servidor.</p>
+                    </div>
+                </div>
+
+                <div class="settings-divider"></div>
+
+                <div class="setting-group">
+                    <label for="memory-input">Contexto personalizado</label>
+                    <textarea id="memory-input" name="memory" rows="3" placeholder="Preferencias..."></textarea>
+                </div>
+
+                <div id="settings-status" class="settings-status"></div>
+
+                <div class="settings-footer">
+                    <button id="close-settings-secondary" class="secondary-button" type="button">Cerrar</button>
+                    <button id="save-settings" class="primary-button" type="submit">Guardar</button>
+                </div>
+            </form>
+        </section>
+    </div>
+
+    <script src="script.js"></script>
+   
+</body>
+</html>
